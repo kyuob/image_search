@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct imagesearchApp: App {
+    private let environment = DIContainer.shared.makeEnvironment()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            HomeView(environment: environment)
         }
     }
 }
