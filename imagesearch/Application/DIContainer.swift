@@ -10,6 +10,7 @@ final class DIContainer {
         let configuration = URLSessionConfiguration.default
         configuration.timeoutIntervalForRequest = 15
         configuration.timeoutIntervalForResource = 30
+        configuration.requestCachePolicy = .reloadRevalidatingCacheData
         return URLSession(configuration: configuration)
     }()
 

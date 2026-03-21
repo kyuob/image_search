@@ -1,9 +1,19 @@
 import Foundation
 
 struct ImageSearchUseCase: Sendable {
-    let repository: ImageSearchRepositoryProtocol
+    private let repository: ImageSearchRepositoryProtocol
+
+    init(repository: ImageSearchRepositoryProtocol) {
+        self.repository = repository
+    }
 
     func execute(query: String) async throws -> [SearchImage] {
-        try await repository.searchImages(query: query)
+        let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard trimmed.isEmpty == false else {
+            throw NetworkError.emptyQuery
+        }
+
+        return try await repository.searchImages(query: trimmed)
     }
 }

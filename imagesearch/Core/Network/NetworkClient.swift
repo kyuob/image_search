@@ -3,15 +3,12 @@ import Foundation
 actor NetworkClient {
     private let session: URLSession
     private let configuration: APIConfiguration
-    private let decoder: JSONDecoder
+    private let decoder = JSONDecoder()
 
     init(session: URLSession, configuration: APIConfiguration) {
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-
         self.session = session
         self.configuration = configuration
-        self.decoder = decoder
+        decoder.dateDecodingStrategy = .iso8601
     }
 
     func send<Response: Decodable>(_ request: APIRequest<Response>) async throws -> Response {

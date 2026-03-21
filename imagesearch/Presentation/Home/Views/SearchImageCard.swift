@@ -7,37 +7,42 @@ struct SearchImageCard: View {
     let onBookmarkTap: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            RemoteImageView(url: image.imageURL ?? image.thumbnailURL, imageLoader: imageLoader)
-                .frame(height: 180)
-                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(image.displaySiteName)
-                        .font(.subheadline.weight(.semibold))
-
-                    if let dateTime = image.dateTime {
-                        Text(dateTime.formatted(date: .numeric, time: .shortened))
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 10) {
+            RemoteImageView(url: image.imageURL, imageLoader: imageLoader)
+                .frame(maxWidth: .infinity)
+                .aspectRatio(1 / image.aspectRatio, contentMode: .fit)
+                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .overlay(alignment: .topTrailing) {
+                    Button(action: onBookmarkTap) {
+                        Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundStyle(isBookmarked ? .yellow : .white)
+                            .padding(10)
+                            .background(.black.opacity(0.45), in: Circle())
+                    }
+                    .padding(12)
+                }
+                .overlay(alignment: .bottomLeading) {
+                    if isBookmarked {
+                        Label("북마크됨", systemImage: "checkmark.circle.fill")
+                            .font(.caption.weight(.semibold))
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                            .background(.thinMaterial, in: Capsule())
+                            .padding(12)
                     }
                 }
 
-                Spacer()
+            VStack(alignment: .leading, spacing: 4) {
+                Text(image.displaySiteName)
+                    .font(.headline)
+                    .lineLimit(1)
 
-                Button(action: onBookmarkTap) {
-                    Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
-                        .font(.title3)
-                        .foregroundStyle(isBookmarked ? Color.accentColor : .secondary)
-                }
-                .buttonStyle(.plain)
+                Text(image.documentURL.absoluteString)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
             }
         }
-        .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(Color(uiColor: .secondarySystemBackground))
-        )
     }
 }

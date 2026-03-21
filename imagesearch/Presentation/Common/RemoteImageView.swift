@@ -2,7 +2,7 @@ import SwiftUI
 import UIKit
 
 struct RemoteImageView: View {
-    let url: URL?
+    let url: URL
     let imageLoader: ImageLoading
 
     @State private var phase: Phase = .empty
@@ -10,7 +10,7 @@ struct RemoteImageView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .fill(Color(uiColor: .secondarySystemBackground))
+                .fill(Color(.secondarySystemBackground))
 
             switch phase {
             case .empty:
@@ -34,11 +34,6 @@ struct RemoteImageView: View {
     }
 
     private func loadImage() async {
-        guard let url else {
-            phase = .failure
-            return
-        }
-
         phase = .empty
 
         do {

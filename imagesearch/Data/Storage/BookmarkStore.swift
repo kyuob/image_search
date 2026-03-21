@@ -20,6 +20,10 @@ actor BookmarkStore {
         }
     }
 
+    func contains(_ image: SearchImage) -> Bool {
+        fetch().contains(image)
+    }
+
     func toggle(_ image: SearchImage) -> Bool {
         var bookmarks = fetch()
 

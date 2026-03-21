@@ -7,19 +7,32 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		2F34CB002F6F50C6008AD297 /* imagesearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = imagesearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F14139A2F6DF56400E6F997 /* imagesearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = imagesearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		2F34CAB02F6E0127008AD297 /* Exceptions for "imagesearch" folder in "imagesearch" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 2F1413992F6DF56400E6F997 /* imagesearch */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		2F34CB022F6F50C6008AD297 /* imagesearch */ = {
+		2F14139C2F6DF56400E6F997 /* imagesearch */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				2F34CAB02F6E0127008AD297 /* Exceptions for "imagesearch" folder in "imagesearch" target */,
+			);
 			path = imagesearch;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		2F34CAFD2F6F50C6008AD297 /* Frameworks */ = {
+		2F1413972F6DF56400E6F997 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -29,18 +42,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2F34CAF72F6F50C6008AD297 = {
+		2F1413912F6DF56400E6F997 = {
 			isa = PBXGroup;
 			children = (
-				2F34CB022F6F50C6008AD297 /* imagesearch */,
-				2F34CB012F6F50C6008AD297 /* Products */,
+				2F14139C2F6DF56400E6F997 /* imagesearch */,
+				2F14139B2F6DF56400E6F997 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		2F34CB012F6F50C6008AD297 /* Products */ = {
+		2F14139B2F6DF56400E6F997 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2F34CB002F6F50C6008AD297 /* imagesearch.app */,
+				2F14139A2F6DF56400E6F997 /* imagesearch.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,64 +61,64 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		2F34CAFF2F6F50C6008AD297 /* imagesearch */ = {
+		2F1413992F6DF56400E6F997 /* imagesearch */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2F34CB0B2F6F50C8008AD297 /* Build configuration list for PBXNativeTarget "imagesearch" */;
+			buildConfigurationList = 2F1413A52F6DF56600E6F997 /* Build configuration list for PBXNativeTarget "imagesearch" */;
 			buildPhases = (
-				2F34CAFC2F6F50C6008AD297 /* Sources */,
-				2F34CAFD2F6F50C6008AD297 /* Frameworks */,
-				2F34CAFE2F6F50C6008AD297 /* Resources */,
+				2F1413962F6DF56400E6F997 /* Sources */,
+				2F1413972F6DF56400E6F997 /* Frameworks */,
+				2F1413982F6DF56400E6F997 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				2F34CB022F6F50C6008AD297 /* imagesearch */,
+				2F14139C2F6DF56400E6F997 /* imagesearch */,
 			);
 			name = imagesearch;
 			packageProductDependencies = (
 			);
 			productName = imagesearch;
-			productReference = 2F34CB002F6F50C6008AD297 /* imagesearch.app */;
+			productReference = 2F14139A2F6DF56400E6F997 /* imagesearch.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		2F34CAF82F6F50C6008AD297 /* Project object */ = {
+		2F1413922F6DF56400E6F997 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2630;
 				LastUpgradeCheck = 2630;
 				TargetAttributes = {
-					2F34CAFF2F6F50C6008AD297 = {
+					2F1413992F6DF56400E6F997 = {
 						CreatedOnToolsVersion = 26.3;
 					};
 				};
 			};
-			buildConfigurationList = 2F34CAFB2F6F50C6008AD297 /* Build configuration list for PBXProject "imagesearch" */;
+			buildConfigurationList = 2F1413952F6DF56400E6F997 /* Build configuration list for PBXProject "imagesearch" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = 2F34CAF72F6F50C6008AD297;
+			mainGroup = 2F1413912F6DF56400E6F997;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 2F34CB012F6F50C6008AD297 /* Products */;
+			productRefGroup = 2F14139B2F6DF56400E6F997 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				2F34CAFF2F6F50C6008AD297 /* imagesearch */,
+				2F1413992F6DF56400E6F997 /* imagesearch */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		2F34CAFE2F6F50C6008AD297 /* Resources */ = {
+		2F1413982F6DF56400E6F997 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -115,7 +128,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		2F34CAFC2F6F50C6008AD297 /* Sources */ = {
+		2F1413962F6DF56400E6F997 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -125,7 +138,7 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		2F34CB092F6F50C8008AD297 /* Debug */ = {
+		2F1413A32F6DF56600E6F997 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -189,7 +202,7 @@
 			};
 			name = Debug;
 		};
-		2F34CB0A2F6F50C8008AD297 /* Release */ = {
+		2F1413A42F6DF56600E6F997 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -246,7 +259,7 @@
 			};
 			name = Release;
 		};
-		2F34CB0C2F6F50C8008AD297 /* Debug */ = {
+		2F1413A62F6DF56600E6F997 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -255,12 +268,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = T32BKDDM9Z;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = imagesearch/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -271,7 +280,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
@@ -279,7 +287,7 @@
 			};
 			name = Debug;
 		};
-		2F34CB0D2F6F50C8008AD297 /* Release */ = {
+		2F1413A72F6DF56600E6F997 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -288,12 +296,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = T32BKDDM9Z;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = imagesearch/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -304,7 +308,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
@@ -315,25 +318,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2F34CAFB2F6F50C6008AD297 /* Build configuration list for PBXProject "imagesearch" */ = {
+		2F1413952F6DF56400E6F997 /* Build configuration list for PBXProject "imagesearch" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2F34CB092F6F50C8008AD297 /* Debug */,
-				2F34CB0A2F6F50C8008AD297 /* Release */,
+				2F1413A32F6DF56600E6F997 /* Debug */,
+				2F1413A42F6DF56600E6F997 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2F34CB0B2F6F50C8008AD297 /* Build configuration list for PBXNativeTarget "imagesearch" */ = {
+		2F1413A52F6DF56600E6F997 /* Build configuration list for PBXNativeTarget "imagesearch" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2F34CB0C2F6F50C8008AD297 /* Debug */,
-				2F34CB0D2F6F50C8008AD297 /* Release */,
+				2F1413A62F6DF56600E6F997 /* Debug */,
+				2F1413A72F6DF56600E6F997 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 2F34CAF82F6F50C6008AD297 /* Project object */;
+	rootObject = 2F1413922F6DF56400E6F997 /* Project object */;
 }

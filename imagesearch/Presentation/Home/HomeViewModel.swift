@@ -10,9 +10,14 @@ final class HomeViewModel: ObservableObject {
     @Published var selectedTab: HomeTab = .search
     @Published var isShowingAlert = false
     @Published private(set) var alertMessage = ""
+    @Published private(set) var searchResultScrollToken = UUID()
 
     private let imageSearchUseCase: ImageSearchUseCase
     private let bookmarkUseCase: BookmarkUseCase
+    private var debounceTask: Task<Void, Never>?
+    private var searchTask: Task<Void, Never>?
+    private var latestQuery = ""
+    private var lastSearchedQuery = ""
     private var hasLoadedBookmarks = false
 
     init(environment: AppEnvironment) {
@@ -21,41 +26,23 @@ final class HomeViewModel: ObservableObject {
     }
 
     func onAppear() {
-        guard hasLoadedBookmarks == false else { return }
-        hasLoadedBookmarks = true
-
-        Task {
-            await loadBookmarks()
-        }
+        latestQuery = query
     }
 
-    func search() {
-        let trimmedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines)
+    func didSelectTab(_ tab: HomeTab) async {
+        guard tab == .bookmark else { return }
+        await Task.yield()
+        await ensureBookmarksLoaded()
+    }
 
-        guard trimmedQuery.isEmpty == false else {
-            presentAlert(NetworkError.emptyQuery.localizedDescription)
-            return
-        }
+    func updateQuery(_ query: String) {
+        latestQuery = query
 
-        Task {
-            isLoading = true
-            isShowingAlert = false
-            alertMessage = ""
-
-            do {
-                let images = try await imageSearchUseCase.execute(query: trimmedQuery)
-                searchResults = images
-                selectedTab = .search
-                isLoading = false
-
-                if images.isEmpty {
-                    presentAlert("검색 결과가 없습니다.")
-                }
-            } catch {
-                searchResults = []
-                isLoading = false
-                presentAlert(error.localizedDescription)
-            }
+        debounceTask?.cancel()
+        debounceTask = Task { [weak self] in
+            try? await Task.sleep(for: .seconds(1))
+            guard Task.isCancelled == false else { return }
+            await self?.runSearchIfNeeded()
         }
     }
 
@@ -66,12 +53,90 @@ final class HomeViewModel: ObservableObject {
         }
     }
 
-    private func loadBookmarks() async {
-        bookmarks = await bookmarkUseCase.bookmarks()
+    func retrySearch() {
+        Task {
+            await runSearch(force: true)
+        }
     }
 
-    private func presentAlert(_ message: String?) {
-        alertMessage = message ?? "알 수 없는 오류가 발생했습니다."
+    private func runSearchIfNeeded() async {
+        let trimmed = latestQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard trimmed.isEmpty == false else {
+            searchTask?.cancel()
+            isLoading = false
+            searchResults = []
+            lastSearchedQuery = ""
+            return
+        }
+
+        guard trimmed != lastSearchedQuery else { return }
+        await runSearch(force: false)
+    }
+
+    private func runSearch(force: Bool) async {
+        let trimmed = latestQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        if trimmed.isEmpty {
+            searchTask?.cancel()
+            isLoading = false
+            searchResults = []
+            lastSearchedQuery = ""
+            return
+        }
+
+        if force == false, trimmed == lastSearchedQuery {
+            return
+        }
+
+        searchTask?.cancel()
+        isLoading = true
+        isShowingAlert = false
+        alertMessage = ""
+
+        searchTask = Task { [weak self] in
+            guard let self else { return }
+
+            do {
+                let images = try await imageSearchUseCase.execute(query: trimmed)
+                guard Task.isCancelled == false else { return }
+
+                self.searchResults = images
+                self.searchResultScrollToken = UUID()
+                self.isLoading = false
+                if self.selectedTab != .search {
+                    self.selectedTab = .search
+                }
+                self.lastSearchedQuery = trimmed
+
+                if images.isEmpty {
+                    self.presentAlert("검색 결과가 없습니다.")
+                }
+            } catch is CancellationError {
+                self.isLoading = false
+            } catch {
+                guard Task.isCancelled == false else { return }
+                self.searchResults = []
+                self.isLoading = false
+                self.presentAlert(error.localizedDescription)
+            }
+        }
+
+        await searchTask?.value
+    }
+
+    private func loadBookmarks() async {
+        bookmarks = await bookmarkUseCase.bookmarks()
+        hasLoadedBookmarks = true
+    }
+
+    private func ensureBookmarksLoaded() async {
+        guard hasLoadedBookmarks == false else { return }
+        await loadBookmarks()
+    }
+
+    private func presentAlert(_ message: String) {
+        alertMessage = message
         isShowingAlert = true
     }
 }

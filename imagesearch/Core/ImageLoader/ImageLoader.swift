@@ -1,16 +1,14 @@
 import Foundation
 import UIKit
 
-final class ImageLoader: ImageLoading, @unchecked Sendable {
+actor ImageLoader: ImageLoading {
     private let session: URLSession
-    private let cache: NSCache<NSURL, UIImage>
+    private let cache = NSCache<NSURL, UIImage>()
+    private var runningTasks: [URL: Task<UIImage, Error>] = [:]
 
     init(session: URLSession) {
-        let cache = NSCache<NSURL, UIImage>()
-        cache.countLimit = 200
-
         self.session = session
-        self.cache = cache
+        cache.countLimit = 200
     }
 
     func image(for url: URL) async throws -> UIImage {
@@ -18,17 +16,34 @@ final class ImageLoader: ImageLoading, @unchecked Sendable {
             return cached
         }
 
-        let (data, response) = try await session.data(from: url)
-
-        guard let httpResponse = response as? HTTPURLResponse, 200..<300 ~= httpResponse.statusCode else {
-            throw NetworkError.invalidResponse
+        if let runningTask = runningTasks[url] {
+            return try await runningTask.value
         }
 
-        guard let image = UIImage(data: data) else {
-            throw NetworkError.decodingFailed
+        let task = Task<UIImage, Error> {
+            let (data, response) = try await session.data(from: url)
+
+            guard let httpResponse = response as? HTTPURLResponse, 200..<300 ~= httpResponse.statusCode else {
+                throw NetworkError.invalidResponse
+            }
+
+            guard let image = UIImage(data: data) else {
+                throw NetworkError.decodingFailed
+            }
+
+            return image
         }
 
-        cache.setObject(image, forKey: url as NSURL)
-        return image
+        runningTasks[url] = task
+
+        do {
+            let image = try await task.value
+            cache.setObject(image, forKey: url as NSURL)
+            runningTasks[url] = nil
+            return image
+        } catch {
+            runningTasks[url] = nil
+            throw error
+        }
     }
 }

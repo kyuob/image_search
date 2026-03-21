@@ -18,12 +18,12 @@ struct MetaDTO: Decodable, Sendable {
 }
 
 struct ImageDocumentDTO: Decodable, Sendable {
-    let thumbnailURL: URL?
-    let imageURL: URL?
+    let thumbnailURL: URL
+    let imageURL: URL
     let width: Double
     let height: Double
     let displaySitename: String
-    let docURL: URL?
+    let docURL: URL
     let datetime: Date?
 
     enum CodingKeys: String, CodingKey {
@@ -38,7 +38,7 @@ struct ImageDocumentDTO: Decodable, Sendable {
 
     func toEntity() -> SearchImage {
         SearchImage(
-            id: imageURL?.absoluteString ?? thumbnailURL?.absoluteString ?? UUID().uuidString,
+            id: imageURL.absoluteString,
             thumbnailURL: thumbnailURL,
             imageURL: imageURL,
             width: width,
