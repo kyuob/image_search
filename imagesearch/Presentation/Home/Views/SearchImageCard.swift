@@ -8,19 +8,28 @@ struct SearchImageCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            RemoteImageView(url: image.thumbnailURL, imageLoader: imageLoader)
+            RemoteImageView(url: image.imageURL ?? image.thumbnailURL, imageLoader: imageLoader)
                 .frame(height: 180)
                 .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
 
             HStack {
-                Text(image.displaySiteName.isEmpty ? "출처 준비 중" : image.displaySiteName)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(image.displaySiteName)
+                        .font(.subheadline.weight(.semibold))
+
+                    if let dateTime = image.dateTime {
+                        Text(dateTime.formatted(date: .numeric, time: .shortened))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
 
                 Spacer()
 
                 Button(action: onBookmarkTap) {
                     Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
+                        .font(.title3)
+                        .foregroundStyle(isBookmarked ? Color.accentColor : .secondary)
                 }
                 .buttonStyle(.plain)
             }

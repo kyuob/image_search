@@ -1,9 +1,24 @@
 import Foundation
 
-protocol APIRequest {
-    var baseURL: URL { get }
-    var path: String { get }
-    var method: String { get }
-    var queryItems: [URLQueryItem] { get }
-    var headers: [String: String] { get }
+struct APIRequest<Response: Decodable> {
+    let path: String
+    let method: HTTPMethod
+    let queryItems: [URLQueryItem]
+    let headers: [String: String]
+
+    init(
+        path: String,
+        method: HTTPMethod = .get,
+        queryItems: [URLQueryItem] = [],
+        headers: [String: String] = [:]
+    ) {
+        self.path = path
+        self.method = method
+        self.queryItems = queryItems
+        self.headers = headers
+    }
+}
+
+enum HTTPMethod: String {
+    case get = "GET"
 }

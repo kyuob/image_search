@@ -31,6 +31,7 @@ struct SearchResultListView: View {
                             )
                         }
                     }
+                    .padding(.bottom, 24)
                 }
             }
         }
