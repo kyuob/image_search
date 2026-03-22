@@ -3,6 +3,7 @@ import SwiftUI
 struct HomeView: View {
     @StateObject private var viewModel: HomeViewModel
     @FocusState private var isSearchFieldFocused: Bool
+    @State private var didAutoFocusInitialSearch = false
     private let imageLoader: ImageLoading
 
     init(environment: AppEnvironment) {
@@ -65,9 +66,22 @@ struct HomeView: View {
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 bottomTabBar
             }
+            .allowsHitTesting(viewModel.isPreparingScreen == false)
+        }
+        .overlay {
+            if viewModel.isPreparingScreen {
+                initialLoadingOverlay
+            }
         }
         .task {
             await viewModel.onAppear()
+        }
+        .task(id: viewModel.isPreparingScreen) {
+            guard viewModel.isPreparingScreen == false,
+                  didAutoFocusInitialSearch == false else { return }
+
+            didAutoFocusInitialSearch = true
+            isSearchFieldFocused = true
         }
         .onChange(of: viewModel.query) { _, newValue in
             viewModel.updateQuery(newValue)
@@ -85,6 +99,26 @@ struct HomeView: View {
         } message: {
             Text(viewModel.alertMessage)
         }
+    }
+
+    private var initialLoadingOverlay: some View {
+        ZStack {
+            Color(.systemBackground)
+                .ignoresSafeArea()
+
+            VStack(spacing: 14) {
+                ProgressView()
+                    .controlSize(.regular)
+
+                Text("준비 중입니다...")
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.horizontal, 28)
+            .padding(.vertical, 24)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        }
+        .transition(.opacity)
     }
 
     private var bottomTabBar: some View {

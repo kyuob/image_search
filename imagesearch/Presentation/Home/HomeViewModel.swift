@@ -7,6 +7,7 @@ final class HomeViewModel: ObservableObject {
     @Published private(set) var searchResults: [SearchImage] = []
     @Published private(set) var bookmarks: [SearchImage] = []
     @Published private(set) var recentQueries: [String] = []
+    @Published private(set) var isPreparingScreen = true
     @Published private(set) var isLoading = false
     @Published var selectedTab: HomeTab = .search
     @Published var isShowingAlert = false
@@ -29,8 +30,21 @@ final class HomeViewModel: ObservableObject {
     }
 
     func onAppear() async {
+        guard isPreparingScreen else { return }
+
+        let startedAt = Date()
         latestQuery = query
+        await Task.yield()
         loadRecentQueries()
+
+        let minimumDisplayDuration: TimeInterval = 0.35
+        let elapsed = Date().timeIntervalSince(startedAt)
+        if elapsed < minimumDisplayDuration {
+            let remaining = minimumDisplayDuration - elapsed
+            try? await Task.sleep(for: .seconds(remaining))
+        }
+
+        isPreparingScreen = false
     }
 
     func didSelectTab(_ tab: HomeTab) async {
