@@ -48,7 +48,10 @@ actor NetworkClient {
 
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = request.method.rawValue
-        urlRequest.setValue(configuration.authorizationHeader, forHTTPHeaderField: "Authorization")
+        guard let authorizationHeader = configuration.authorizationHeader else {
+            throw NetworkError.missingAPIKey
+        }
+        urlRequest.setValue(authorizationHeader, forHTTPHeaderField: "Authorization")
         request.headers.forEach { key, value in
             urlRequest.setValue(value, forHTTPHeaderField: key)
         }

@@ -38,7 +38,7 @@ struct ImageDocumentDTO: Decodable, Sendable {
 
     func toEntity() -> SearchImage {
         SearchImage(
-            id: imageURL.absoluteString,
+            id: "\(docURL.absoluteString)|\(imageURL.absoluteString)",
             thumbnailURL: thumbnailURL,
             imageURL: imageURL,
             width: width,

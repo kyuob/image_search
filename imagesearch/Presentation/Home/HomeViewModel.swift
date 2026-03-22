@@ -20,6 +20,7 @@ final class HomeViewModel: ObservableObject {
     private var latestQuery = ""
     private var lastSearchedQuery = ""
     private var hasLoadedBookmarks = false
+    private var isIgnoringNextQueryChange = false
     private let recentQueriesKey = "recent_search_queries"
 
     init(environment: AppEnvironment) {
@@ -30,7 +31,6 @@ final class HomeViewModel: ObservableObject {
     func onAppear() async {
         latestQuery = query
         loadRecentQueries()
-        await ensureBookmarksLoaded()
     }
 
     func didSelectTab(_ tab: HomeTab) async {
@@ -40,6 +40,12 @@ final class HomeViewModel: ObservableObject {
     }
 
     func updateQuery(_ query: String) {
+        if isIgnoringNextQueryChange {
+            isIgnoringNextQueryChange = false
+            latestQuery = query
+            return
+        }
+
         latestQuery = query
 
         debounceTask?.cancel()
@@ -65,6 +71,7 @@ final class HomeViewModel: ObservableObject {
 
     func selectRecentQuery(_ query: String) {
         debounceTask?.cancel()
+        isIgnoringNextQueryChange = true
         self.query = query
         latestQuery = query
 

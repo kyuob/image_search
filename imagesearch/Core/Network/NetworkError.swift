@@ -6,6 +6,7 @@ enum NetworkError: LocalizedError {
     case decodingFailed
     case httpStatus(Int)
     case emptyQuery
+    case missingAPIKey
 
     var errorDescription: String? {
         switch self {
@@ -19,6 +20,8 @@ enum NetworkError: LocalizedError {
             return "서버 요청에 실패했습니다. (\(code))"
         case .emptyQuery:
             return "검색어를 입력해 주세요."
+        case .missingAPIKey:
+            return "API 키 설정이 누락되었습니다."
         }
     }
 }
