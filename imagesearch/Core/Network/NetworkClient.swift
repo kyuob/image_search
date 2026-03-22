@@ -4,11 +4,33 @@ actor NetworkClient {
     private let session: URLSession
     private let configuration: APIConfiguration
     private let decoder = JSONDecoder()
+    private let iso8601FormatterWithFractionalSeconds: ISO8601DateFormatter = {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return formatter
+    }()
+    private let iso8601Formatter: ISO8601DateFormatter = {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime]
+        return formatter
+    }()
 
     init(session: URLSession, configuration: APIConfiguration) {
         self.session = session
         self.configuration = configuration
-        decoder.dateDecodingStrategy = .iso8601
+        decoder.dateDecodingStrategy = .custom { [iso8601FormatterWithFractionalSeconds, iso8601Formatter] decoder in
+            let container = try decoder.singleValueContainer()
+            let value = try container.decode(String.self)
+
+            if let date = iso8601FormatterWithFractionalSeconds.date(from: value) ?? iso8601Formatter.date(from: value) {
+                return date
+            }
+
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "Expected date string to be ISO8601-formatted."
+            )
+        }
     }
 
     func send<Response: Decodable>(_ request: APIRequest<Response>) async throws -> Response {
