@@ -6,6 +6,7 @@ final class HomeViewModel: ObservableObject {
     @Published var query = ""
     @Published private(set) var searchResults: [SearchImage] = []
     @Published private(set) var bookmarks: [SearchImage] = []
+    @Published private(set) var recentQueries: [String] = []
     @Published private(set) var isLoading = false
     @Published var selectedTab: HomeTab = .search
     @Published var isShowingAlert = false
@@ -19,14 +20,17 @@ final class HomeViewModel: ObservableObject {
     private var latestQuery = ""
     private var lastSearchedQuery = ""
     private var hasLoadedBookmarks = false
+    private let recentQueriesKey = "recent_search_queries"
 
     init(environment: AppEnvironment) {
         imageSearchUseCase = environment.imageSearchUseCase
         bookmarkUseCase = environment.bookmarkUseCase
     }
 
-    func onAppear() {
+    func onAppear() async {
         latestQuery = query
+        loadRecentQueries()
+        await ensureBookmarksLoaded()
     }
 
     func didSelectTab(_ tab: HomeTab) async {
@@ -59,10 +63,21 @@ final class HomeViewModel: ObservableObject {
         }
     }
 
+    func selectRecentQuery(_ query: String) {
+        debounceTask?.cancel()
+        self.query = query
+        latestQuery = query
+
+        Task {
+            await runSearch(force: true)
+        }
+    }
+
     private func runSearchIfNeeded() async {
         let trimmed = latestQuery.trimmingCharacters(in: .whitespacesAndNewlines)
 
         guard trimmed.isEmpty == false else {
+            debounceTask?.cancel()
             searchTask?.cancel()
             isLoading = false
             searchResults = []
@@ -78,6 +93,7 @@ final class HomeViewModel: ObservableObject {
         let trimmed = latestQuery.trimmingCharacters(in: .whitespacesAndNewlines)
 
         if trimmed.isEmpty {
+            debounceTask?.cancel()
             searchTask?.cancel()
             isLoading = false
             searchResults = []
@@ -108,6 +124,7 @@ final class HomeViewModel: ObservableObject {
                     self.selectedTab = .search
                 }
                 self.lastSearchedQuery = trimmed
+                self.storeRecentQuery(trimmed)
 
                 if images.isEmpty {
                     self.presentAlert("검색 결과가 없습니다.")
@@ -133,6 +150,17 @@ final class HomeViewModel: ObservableObject {
     private func ensureBookmarksLoaded() async {
         guard hasLoadedBookmarks == false else { return }
         await loadBookmarks()
+    }
+
+    private func loadRecentQueries() {
+        recentQueries = UserDefaults.standard.stringArray(forKey: recentQueriesKey) ?? []
+    }
+
+    private func storeRecentQuery(_ query: String) {
+        var queries = recentQueries.filter { $0 != query }
+        queries.insert(query, at: 0)
+        recentQueries = Array(queries.prefix(3))
+        UserDefaults.standard.set(recentQueries, forKey: recentQueriesKey)
     }
 
     private func presentAlert(_ message: String) {

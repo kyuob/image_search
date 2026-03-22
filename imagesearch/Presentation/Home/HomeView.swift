@@ -12,6 +12,7 @@ struct HomeView: View {
 
     var body: some View {
         let bookmarkedIDs = Set(viewModel.bookmarks.map(\.id))
+        let isShowingSearchPlaceholder = viewModel.query.isEmpty
 
         NavigationStack {
             VStack(spacing: 0) {
@@ -22,7 +23,15 @@ struct HomeView: View {
                 )
                 .padding(.horizontal, 16)
                 .padding(.top, 16)
-                .padding(.bottom, 16)
+                .padding(.bottom, viewModel.recentQueries.isEmpty ? 16 : 10)
+
+                if viewModel.recentQueries.isEmpty == false,
+                   viewModel.selectedTab == .search,
+                   isShowingSearchPlaceholder {
+                    recentSearchSection
+                        .padding(.horizontal, 16)
+                        .padding(.bottom, 12)
+                }
 
                 Group {
                     switch viewModel.selectedTab {
@@ -30,7 +39,7 @@ struct HomeView: View {
                         SearchResultListView(
                             items: viewModel.searchResults,
                             isLoading: viewModel.isLoading,
-                            emptyMessage: viewModel.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                            emptyMessage: isShowingSearchPlaceholder
                                 ? "검색어를 입력하면 1초 뒤 자동으로 검색됩니다."
                                 : "검색 결과가 없습니다.",
                             scrollToken: viewModel.searchResultScrollToken,
@@ -58,7 +67,7 @@ struct HomeView: View {
             }
         }
         .task {
-            viewModel.onAppear()
+            await viewModel.onAppear()
         }
         .onChange(of: viewModel.query) { _, newValue in
             viewModel.updateQuery(newValue)
@@ -102,6 +111,33 @@ struct HomeView: View {
         .background(Color.white)
         .overlay(alignment: .top) {
             Divider()
+        }
+    }
+
+    private var recentSearchSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("최근 검색어")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(viewModel.recentQueries, id: \.self) { query in
+                        Button {
+                            isSearchFieldFocused = false
+                            viewModel.selectRecentQuery(query)
+                        } label: {
+                            Text(query)
+                                .font(.subheadline.weight(.medium))
+                                .foregroundStyle(.primary)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 8)
+                                .background(Color(uiColor: .secondarySystemBackground), in: Capsule())
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
         }
     }
 

@@ -10,7 +10,7 @@ struct SearchBar: View {
             Image(systemName: "magnifyingglass")
                 .foregroundStyle(.secondary)
 
-            TextField("이미지 검색", text: text)
+            TextField("검색어를 입력해 주세요.", text: text)
                 .focused(isFocused)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()

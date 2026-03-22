@@ -34,15 +34,46 @@ struct SearchImageCard: View {
                 }
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(image.displaySiteName)
-                    .font(.headline)
-                    .lineLimit(1)
+                if image.displaySiteName.isEmpty == false {
+                    Text(image.displaySiteName)
+                        .font(.headline)
+                        .lineLimit(1)
+                }
 
-                Text(image.documentURL.absoluteString)
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
+                HStack(spacing: 8) {
+                    Label("\(Int(image.width)) x \(Int(image.height))", systemImage: "rectangle.compress.vertical")
+                    if let dateText = formattedDateText {
+                        Label(dateText, systemImage: "calendar")
+                    }
+                }
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+                Link(destination: image.documentURL) {
+                    Label("원문 보기", systemImage: "arrow.up.right.square")
+                        .font(.footnote.weight(.medium))
+                }
+                .foregroundStyle(.blue)
             }
         }
     }
+
+    private var formattedDateText: String? {
+        guard let date = image.dateTime else { return nil }
+
+        let calendar = Calendar.current
+        if calendar.isDateInToday(date) || calendar.isDateInYesterday(date) {
+            return Self.relativeFormatter.localizedString(for: date, relativeTo: .now)
+        }
+
+        return date.formatted(date: .abbreviated, time: .omitted)
+    }
+}
+
+private extension SearchImageCard {
+    static let relativeFormatter: RelativeDateTimeFormatter = {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .short
+        return formatter
+    }()
 }

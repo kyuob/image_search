@@ -1,6 +1,6 @@
 import Foundation
 
-struct SearchImage: Identifiable, Equatable, Codable, Sendable {
+struct SearchImage: Identifiable, Codable, Sendable {
     let id: String
     let thumbnailURL: URL
     let imageURL: URL
@@ -13,5 +13,11 @@ struct SearchImage: Identifiable, Equatable, Codable, Sendable {
     var aspectRatio: Double {
         guard width > 0, height > 0 else { return 1 }
         return height / width
+    }
+}
+
+extension SearchImage: Equatable {
+    static func == (lhs: SearchImage, rhs: SearchImage) -> Bool {
+        lhs.id == rhs.id
     }
 }

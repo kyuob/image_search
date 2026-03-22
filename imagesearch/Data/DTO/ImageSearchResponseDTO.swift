@@ -43,7 +43,7 @@ struct ImageDocumentDTO: Decodable, Sendable {
             imageURL: imageURL,
             width: width,
             height: height,
-            displaySiteName: displaySitename.isEmpty ? "출처 미상" : displaySitename,
+            displaySiteName: displaySitename,
             documentURL: docURL,
             dateTime: datetime
         )
