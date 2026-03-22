@@ -66,11 +66,16 @@ Xcode + Codex
 | # | 파일 | 문제 유형 | 심각도 | 상태 |
 |---|------|-----------|--------|------|
 | 1 | `HomeViewModel.swift` | `selectRecentQuery(_:)` 호출 시 즉시 검색과 디바운스 검색이 겹쳐 같은 질의가 중복 요청될 수 있음 | 🟡 Medium | 수정 완료 |
-| 2 | `APIConfiguration.swift` | API 키 누락 시 `assertionFailure` 후 빈 문자열 헤더로 요청이 계속 진행되어 설정 오류와 네트워크 오류 구분이 어려움 | 🔴 High | 미수정 |
-| 3 | `ImageSearchResponseDTO.swift` | `id`를 `imageURL.absoluteString` 하나에만 의존해 서로 다른 문서가 동일 결과로 취급될 수 있음 | 🔴 High | 수정 완료 |
-| 4 | `HomeViewModel.swift` | 앱 시작 시 최근 검색어와 북마크를 동시에 즉시 로드해 첫 상호작용 시 체감 지연 가능성이 있음 | 🟡 Medium | 수정 완료 |
-| 5 | `BookmarkStore.swift` | 저장 데이터 디코딩 실패 시 조용히 빈 배열로 대체되어 북마크 손실처럼 보일 수 있음 | 🟡 Medium | 미수정 |
-| 6 | `NetworkClient.swift` | `DecodingError` 상세 정보를 버리고 단일 `decodingFailed`로만 처리해 장애 분석이 어려움 | 🟡 Medium | 미수정 |
+| 2 | `APIConfiguration.swift` | API 키 누락 시 잘못된 Authorization 헤더로 요청이 진행될 수 있음 | 🔴 High | 수정 완료 |
+| 3 | `ImageSearchResponseDTO.swift` | 결과 식별자를 단일 이미지 URL에만 의존하면 서로 다른 문서가 동일 결과로 취급될 수 있음 | 🔴 High | 수정 완료 |
+| 4 | `HomeViewModel.swift` | 첫 화면 진입 시 준비 상태 표시가 없어 첫 입력 타이밍이 어색할 수 있음 | 🟡 Medium | 수정 완료 |
+| 5 | `HomeView.swift` | 초기 화면 준비 중에도 사용자가 바로 터치할 수 있어 첫 상호작용 체감이 불안정할 수 있음 | 🟡 Medium | 수정 완료 |
+| 6 | `HomeView.swift` | 첫 화면 준비가 끝난 뒤 검색창 자동 포커스가 없어 첫 입력 흐름이 한 번 더 끊길 수 있음 | 🟡 Medium | 수정 완료 |
+| 7 | `HomeViewModel.swift`, `SearchResultListView.swift` | 앱 첫 진입 시 북마크를 미리 로드하지 않아 검색 결과 카드의 북마크 상태가 바로 반영되지 않을 수 있음 | 🟡 Medium | 미수정 |
+| 8 | `BookmarkStore.swift` | 저장 데이터 디코딩 실패 시 조용히 빈 배열로 대체되어 북마크 손실처럼 보일 수 있음 | 🟡 Medium | 미수정 |
+| 9 | `NetworkClient.swift` | `DecodingError` 상세 정보를 버리고 단일 `decodingFailed`로만 처리해 장애 분석이 어려움 | 🟡 Medium | 미수정 |
+| 10 | `SearchImageCard.swift` | 카드가 `thumbnailURL`이 아닌 원본 `imageURL`을 직접 로드해 외부 호스트 품질에 영향을 크게 받을 수 있음 | 🟢 Low | 미수정 |
+| 11 | `ImageSearchRepository.swift` | API 메뉴얼 전문 주석이 코드 안에 그대로 남아 있어 파일 가독성과 유지보수성이 떨어질 수 있음 | 🟢 Low | 미수정 |
 
 ---
 
@@ -82,4 +87,3 @@ Xcode + Codex
 - SwiftUI
 - URLSession 기반 네트워크 통신
 - 외부 라이브러리 사용 없음
-
